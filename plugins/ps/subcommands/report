@@ -13,7 +13,7 @@ report_single_app() {
   local APP_CIDS=$(get_app_container_ids "$APP"); local PROCS=0; local RUNNING=""
 
   for CID in $APP_CIDS; do
-    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Running}}' "$CID" 2>/dev/null || true)
+    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Running}}' "$CID" 2> /dev/null || true)
     if [[ "$APP_CONTAINER_STATUS" == "true" ]]; then RUNNING+="0"; else RUNNING+="1"; fi
     PROCS=$((PROCS + 1))
   done
@@ -36,7 +36,7 @@ report_single_app() {
   if [[ "$DOKKU_APP_RESTORE" != 0 ]]; then RESTORE="true"; else RESTORE="false"; fi
   for CONTAINER_FILE in $CONTAINER_FILES; do
     CID=$(< "$DOKKU_ROOT/$APP/$CONTAINER_FILE")
-    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Running}}' "$CID")
+    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Status}}' "$CID" 2> /dev/null || echo "missing")
     STATUSES+=("${CONTAINER_FILE#*.}:$APP_CONTAINER_STATUS#${CID:0:12}")
   done
   local flag_map=(
