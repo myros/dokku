@@ -39,7 +39,7 @@ report_single_app() {
   if [[ "$DOKKU_APP_RESTORE" != 0 ]]; then RESTORE="true"; else RESTORE="false"; fi
   for CONTAINER_FILE in $CONTAINER_FILES; do
     CID=$(< "$DOKKU_ROOT/$APP/$CONTAINER_FILE")
-    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Status}}' "$CID" 2> /dev/null || echo "missing")
+    local APP_CONTAINER_STATUS=$(docker inspect -f '{{.State.Status}}' "$CID" 2> /dev/null || echo "dead")
     STATUSES+=("${CONTAINER_FILE#*.}:$APP_CONTAINER_STATUS#${CID:0:12}")
   done
   local flag_map=(
