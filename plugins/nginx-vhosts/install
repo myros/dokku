@@ -80,8 +80,8 @@ case "$DOKKU_DISTRO" in
     ;;
 
   ubuntu)
-    NGINX_INIT="/etc/init.d/nginx"
-    "$NGINX_INIT" start || "$NGINX_INIT" reload
+    NGINX_INIT="docker kill -s HUP nginx"
+    "$NGINX_INIT"
     ;;
 
   opensuse)
